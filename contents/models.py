@@ -9,10 +9,9 @@ class Post(TimStampMixin,BaseModel):
     publish_at = models.DateTimeField(_("publish at"),
                                       auto_now=False,
                                       auto_now_add=True)
-    user = models.ForeignKey(
-                                "user.User",
-                                verbose_name=_("User"),
-                                on_delete=models.CASCADE)
+    user = models.ForeignKey("account.User",
+                            verbose_name=_("User"),
+                            on_delete=models.CASCADE)
     
     def is_liked_by_user(self,user):
         return self.reaction_set.filter(user=user).exists()
@@ -20,7 +19,7 @@ class Post(TimStampMixin,BaseModel):
     
 class Tag(models.Model):
     text = models.CharField(_("Tag"), max_length=50)
-    post = models.ManyToManyField(
+    related_post = models.ManyToManyField(
             "Post",
             verbose_name=_("Post"),
             related_name="Tags")
@@ -42,7 +41,7 @@ class Image(models.Model):
     image = models.FileField(_("Image"),
                              upload_to="post-images", 
                              max_length=100)
-    post = models.ForeignKey("Post", 
+    related_post = models.ForeignKey("Post", 
                              verbose_name=_("post"),
                              on_delete=models.CASCADE,
                              related_name="image")
@@ -62,10 +61,10 @@ class Image(models.Model):
 
 class Comment(models.Model):
     text = models.TextField(_("text"))
-    user = models.ForeignKey("user.User", 
+    user = models.ForeignKey("account.User", 
                              verbose_name=_("user"),
                              on_delete=models.CASCADE)
-    post = models.ForeignKey("Post", 
+    related_post = models.ForeignKey("Post", 
                              verbose_name=_("Post"),
                              on_delete=models.CASCADE)
     reply_to = models.ForeignKey("self", 
@@ -89,10 +88,10 @@ class Comment(models.Model):
    
         
 class Reaction(BaseModel):
-    user = models.ForeignKey("user.User", 
+    user = models.ForeignKey("account.User", 
                              verbose_name=_("user"),
                              on_delete=models.CASCADE)
-    post = models.ForeignKey("Post", 
+    related_post = models.ForeignKey("Post", 
                              verbose_name=_("Post"),
                              on_delete=models.CASCADE)
     

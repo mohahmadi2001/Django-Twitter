@@ -67,7 +67,7 @@ class Archive(models.Model):
     user_archive = models.ForeignKey("User",
                                      verbose_name=_("archive user"),
                                      on_delete=models.CASCADE)
-    post_archive = models.ForeignKey("post.post",
+    post_archive = models.ForeignKey("contents.Post",
                                      verbose_name=_("archive post"),
                                      on_delete=models.CASCADE)
     
