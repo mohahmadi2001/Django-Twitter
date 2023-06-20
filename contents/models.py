@@ -19,10 +19,9 @@ class Post(TimStampMixin,BaseModel):
     
 class Tag(models.Model):
     text = models.CharField(_("Tag"), max_length=50)
-    related_post = models.ManyToManyField(
-            "Post",
-            verbose_name=_("Post"),
-            related_name="Tags")
+    related_post = models.ManyToManyField("Post",
+                                        verbose_name=_("Post"),
+                                        related_name="Tags")
     
     def add_tag(self, tag_text):
         tag, created = Tag.objects.get_or_create(text=tag_text)

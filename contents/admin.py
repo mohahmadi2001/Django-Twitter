@@ -2,9 +2,16 @@ from django.contrib import admin
 from .models import Post,Comment,Tag,Reaction,Image
 # Register your models here.
 
+class ImageInline(admin.TabularInline):
+    model = Image
+    extra = 1
+    
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    pass
+    list_display =['id','text']
+    search_fields =['username','text']
+    inlines = [ImageInline]
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
