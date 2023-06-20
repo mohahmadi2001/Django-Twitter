@@ -85,7 +85,6 @@ class Comment(models.Model):
         return self.comment.all()
    
    
-        
 class Reaction(BaseModel):
     user = models.ForeignKey("account.User", 
                              verbose_name=_("user"),
