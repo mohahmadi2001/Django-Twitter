@@ -12,9 +12,19 @@ class Post(TimStampMixin,BaseModel):
     user = models.ForeignKey("account.User",
                             verbose_name=_("User"),
                             on_delete=models.CASCADE)
+    is_archived = models.BooleanField(default=False, verbose_name="Archived")
+
     
     def is_liked_by_user(self,user):
         return self.reaction_set.filter(user=user).exists()
+
+    def archive(self):
+        self.is_archived = True
+        self.save()
+        
+    def unarchive(self):
+        self.is_archived = False
+        self.save()
 
     
 class Tag(models.Model):

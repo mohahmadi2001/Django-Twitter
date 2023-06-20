@@ -22,6 +22,7 @@ class User(BaseModel):
         verbose_name=_("Image"),
         upload_to='profilePhoto')
     bio = models.TextField(_("Biography"))
+    is_archived = models.BooleanField(default=False, verbose_name="Archived")
     
     def view_profile(self):
         profile = {
@@ -31,6 +32,14 @@ class User(BaseModel):
         }
         return profile
     
+    def deactivate(self):
+        self.is_archived = True
+        self.save()
+        
+    def activate(self):
+        self.is_archived = False
+        self.save()
+
 
 class Relation(models.Model,TimStampMixin):
     from_user = models.ForeignKey("User",
@@ -60,25 +69,3 @@ class Relation(models.Model,TimStampMixin):
             relation.delete()
             return True
         return False
-
-class Archive(models.Model):
-    user_archive = models.ForeignKey("User",
-                                     verbose_name=_("archive user"),
-                                     on_delete=models.CASCADE)
-    post_archive = models.ForeignKey("contents.Post",
-                                     verbose_name=_("archive post"),
-                                     on_delete=models.CASCADE)
-    
-    def archive_post(self, post):
-        archive, created = Archive.objects.get_or_create(user_archive=self, post_archive=post)
-        if created:
-            return True
-        return False
-  
-    
-    def unarchive_post(self, post):
-        archive = Archive.objects.filter(user_archive=self, post_archive=post).first()
-        if archive:
-            archive.delete()
-            return True
-        return False    
