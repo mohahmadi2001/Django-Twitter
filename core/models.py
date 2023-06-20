@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from uuid import uuid4
 from django.utils.translation import gettext as _
 
@@ -6,10 +7,12 @@ from django.utils.translation import gettext as _
 
 class BaseModel(models.Model):
     id = models.UUIDField(_("id"),editable=False,primary_key=True,default=uuid4)
-    
+
     class Meta:
         abstract = True
     
 class TimStampMixin:
     create_at = models.DateTimeField(_("create at"), auto_now=False, auto_now_add=True)
     update_at = models.DateTimeField(_("update at"), auto_now=True, auto_now_add=False)
+
+    

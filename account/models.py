@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext as _
-
+from core.models import BaseModel,TimStampMixin
 # Create your models here.
 
-class User(models.Model):
+class User(BaseModel):
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -32,7 +32,7 @@ class User(models.Model):
         return profile
     
 
-class Relation(models.Model):
+class Relation(models.Model,TimStampMixin):
     from_user = models.ForeignKey("User",
                                     verbose_name=_("from_user"),
                                     on_delete=models.CASCADE,
@@ -41,14 +41,12 @@ class Relation(models.Model):
                                     verbose_name=_("from_user"),
                                     on_delete=models.CASCADE,
                                     related_name="Followers")
-    create_at = models.DateTimeField(_("create at"), auto_now=False, auto_now_add=True)
-    update_at = models.DateTimeField(_("update at"), auto_now=True, auto_now_add=False)
+  
     
     def get_followers(self):
         followers = Relation.objects.filter(to_user=self)
         return [follower.from_user for follower in followers]
     
-
     def follow(self, user):
         if user != self:
             relation, created = Relation.objects.get_or_create(from_user=self, to_user=user)
