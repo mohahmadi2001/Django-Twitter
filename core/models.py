@@ -7,6 +7,8 @@ from django.utils.translation import gettext as _
 class BaseModel(models.Model):
     id = models.UUIDField(_("id"),editable=False,primary_key=True,default=uuid4)
     
+    class Meta:
+        abstract = True
     
 class TimStampMixin:
     create_at = models.DateTimeField(_("create at"), auto_now=False, auto_now_add=True)
