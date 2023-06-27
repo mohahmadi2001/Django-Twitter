@@ -42,7 +42,9 @@ class Relation(models.Model,TimStampMixin):
                                     on_delete=models.CASCADE,
                                     related_name="Followers")
   
-    
+    class Meta:
+        verbose_name, verbose_name_plural = _("Relation"), _("Relations")
+
     def get_followers(self):
         followers = Relation.objects.filter(to_user=self)
         return [follower.from_user for follower in followers]
