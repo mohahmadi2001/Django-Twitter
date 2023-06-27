@@ -1,29 +1,16 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
 from core.models import BaseModel,TimStampMixin
 # Create your models here.
 
-class User(BaseModel):
-    username = models.CharField(
-        max_length=150,
-        unique=True,
-        db_index=True,
-        verbose_name=_("Username"),
-        help_text="Username to login and show in the profile",
-        blank=False,
-        null=False)
-    password = models.CharField(
-        max_length=150,
-        verbose_name=_("password"),
-        help_text="password to login and show in the profile",
-        blank=False,
-        null=False)
+class User(AbstractUser):
+    
+    age = models.PositiveIntegerField(_("age"),blank=True,null=True)
     image = models.ImageField(
         verbose_name=_("Image"),
         upload_to='profilePhoto')
     bio = models.TextField(_("Biography"))
-    is_archived = models.BooleanField(default=False, verbose_name="Archived")
     
     def view_profile(self):
         profile = {
@@ -32,14 +19,17 @@ class User(BaseModel):
             'bio': self.bio,
         }
         return profile
-    
-    def deactivate(self):
-        self.is_archived = True
-        self.save()
-        
-    def activate(self):
-        self.is_archived = False
-        self.save()
+    @property
+    def followings_count(self) -> int:
+        return self.followings.count()
+
+    @property
+    def followers_count(self) -> int:
+        return self.followers.count()
+
+
+    class Meta:
+        verbose_name, verbose_name_plural = _("User"), _("Users")
 
 
 class Relation(models.Model,TimStampMixin):
