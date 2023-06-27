@@ -1,42 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext as _
-from core.models import BaseModel,TimStampMixin
+from core.models import BaseModel,TimStampMixin,SoftDeleteModel 
 # Create your models here.
 
-
-class Post(TimStampMixin,BaseModel):
-    # class Statuses(models.TextChoices):
-    #     DRAFT = "D",_("Draft")
-    #     PUBLISHED = "p",_("Published")
+class Tag(BaseModel):
+    text = models.CharField(max_length=10)
     
-    text = models.TextField(_("post text"))
-    publish_at = models.DateTimeField(_("publish at"),
-                                      auto_now=False,
-                                      auto_now_add=True)
-    user = models.ForeignKey("account.User",
-                            verbose_name=_("User"),
-                            on_delete=models.CASCADE)
-    is_archived = models.BooleanField(default=False, verbose_name="Archived")
-    # status = models.CharField(_("status"),Statuses)
-    
-    
-    def is_liked_by_user(self,user):
-        return self.reaction_set.filter(user=user).exists()
-
-    def archive(self):
-        self.is_archived = True
-        self.save()
-        
-    def unarchive(self):
-        self.is_archived = False
-        self.save()
-
-    
-class Tag(models.Model):
-    text = models.CharField(_("Tag"), max_length=50)
-    related_post = models.ManyToManyField("Post",
-                                        verbose_name=_("Post"),
-                                        related_name="Tags")
+    def __str__(self) -> str:
+        return self.text
     
     def add_tag(self, tag_text):
         tag, created = Tag.objects.get_or_create(text=tag_text)
@@ -51,7 +22,44 @@ class Tag(models.Model):
         return self.Tags.all()
     
     
-class Image(models.Model):
+class Post(TimStampMixin,SoftDeleteModel):
+    
+    class Meta:
+        verbose_name = _("Post")
+        verbose_name_plural = _("Posts")
+        
+    class Statuses(models.TextChoices):
+        DRAFT = "D", _("Draft")
+        PUBLISHED = "P", _("Published")
+        
+    text = models.TextField(verbose_name=_("Title"), help_text=_("Text to display"))
+    user = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="posts",
+    )
+    status = models.CharField(
+        max_length=1,
+        choices=Statuses.choices,
+        default=Statuses.PUBLISHED,
+    )
+    tags = models.ManyToManyField(Tag, related_name="posts")
+
+    
+    
+    def is_liked_by_user(self,user):
+        return self.reaction_set.filter(user=user).exists()
+
+    def archive(self):
+        self.is_archived = True
+        self.save()
+        
+    def unarchive(self):
+        self.is_archived = False
+        self.save()
+
+   
+class Image(BaseModel):
     image = models.FileField(_("Image"),
                              upload_to="post-images", 
                              max_length=100)
@@ -73,7 +81,7 @@ class Image(models.Model):
         return self.image.all()
     
 
-class Comment(models.Model):
+class Comment(BaseModel):
     text = models.TextField(_("text"))
     user = models.ForeignKey("account.User", 
                              verbose_name=_("user"),
