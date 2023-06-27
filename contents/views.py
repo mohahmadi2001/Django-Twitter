@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from .models import Post,Tag
+from .models import Post,Tag,Image
 from django.views import View
 # Create your views here.
 
@@ -13,3 +13,9 @@ class TagView(View):
     def get(self, request, tag_id):
         tag = get_object_or_404(Tag, id=tag_id)
         return render(request, 'tag.html', {'tag': tag})
+    
+    
+class ImageView(View):
+    def get(self, request, image_id):
+        image = get_object_or_404(Image, id=image_id)
+        return render(request, 'image.html', {'image': image})

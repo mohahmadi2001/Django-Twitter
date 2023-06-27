@@ -1,0 +1,9 @@
+{% extends 'base/base.html' %}
+{% block title %}
+Tags List
+{% endblock title %}{% block images %}
+<h1>Image</h1>
+<img src="{{ image.image.url }}" alt="Image">
+<p>Image ID: {{ image.id }}</p>
+<p>Related Post ID: {{ image.related_post.id }}</p>
+{% endblock images %}
