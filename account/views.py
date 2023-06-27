@@ -10,11 +10,13 @@ class UserView(View):
         context = {'users': users}
         return render(request, 'user_list.html', context)
 
+
 class ProfileView(View):
     def get(self, request, username):
         user = get_object_or_404(User, username=username)
         profile = user.view_profile()
         return render(request,"profile.html",profile)
+    
     
 class FollowUserView(View):
     def post(self, request, username):
@@ -31,3 +33,10 @@ class FollowUserView(View):
             message = 'You must be logged in to follow users'
         
         return render(request, 'follow_user.html', {'message': message})
+    
+
+class FollowersView(View):
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        followers = user.followers_count
+        return render(request, 'followers.html', {'followers': followers})
