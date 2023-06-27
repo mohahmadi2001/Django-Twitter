@@ -9,9 +9,22 @@ class ImageInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display =['id','text']
-    search_fields =['username','text']
+    fieldsets = (
+        (
+            None, {
+                'fields': ('text', ('user', 'status', 'is_deleted'), 'tags'),
+            },
+        ),
+    )
+    list_display =['text','user','status']
+    search_fields =['text']
+    list_filter = ["status"]
     inlines = [ImageInline]
+    
+    @admin.action(description="This Action is Published Selected Post")
+    def published_posts(self, request, queryset):
+        queryset.update(status=Post.Statuses.PUBLISHED)
+        self.message_user(request, 'Published Successfully')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
