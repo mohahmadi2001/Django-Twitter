@@ -25,3 +25,9 @@ class CommentView(View):
     def get(self, request, comment_id):
         comment = get_object_or_404(Comment, id=comment_id)
         return render(request, 'comment.html', {'comment': comment})
+    
+
+class ReactionView(View):
+    def get(self, request, reaction_id):
+        reaction = get_object_or_404(Reaction, id=reaction_id)
+        return render(request, 'reaction.html', {'reaction': reaction})
