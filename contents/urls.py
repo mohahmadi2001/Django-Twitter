@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import UserView
+from .views import PostView,TagView
 
 app_name = "account"
 urlpatterns = [
-    path('users/',UserView.as_view(),name="show_users" ),
+    path('posts/',PostView.as_view(),name="post"),
+    path('tags/',TagView.as_view(),name="tag"),
+
 ]
