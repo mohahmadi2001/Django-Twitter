@@ -8,11 +8,17 @@
 <body>
     <!--page header-->
     {% include 'components/header.html' %}
-    <!--page content-->
+    <!--account-->
     {% block user_list %}{% endblock user_list %}
     {% block post_list %}{% endblock post_list %}
     {% block profile %}{% endblock profile %}
     {% block follow_result %}{% endblock follow_result %}
+    <!--post-->
+    {% block post %}{% endblock post %}
+    {% block tags %}{% endblock tags %}
+    {% block comments %}{% endblock comments %}
+    {% block images %}{% endblock images %}
+    {% block reactions %}{% endblock reactions %}
     <!--page footer-->
     {% include 'components/footer.html' %}
 </body>

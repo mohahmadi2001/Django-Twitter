@@ -1,10 +1,10 @@
 {% extends 'base/base.html' %}
 {% block title %}
 Comments
-{% endblock title %}{% block images %}
+{% endblock title %}{% block comments %}
 <h1>Comment</h1>
 <p>Comment ID: {{ comment.id }}</p>
 <p>User: {{ comment.user.username }}</p>
 <p>Text: {{ comment.text }}</p>
 <p>Related Post ID: {{ comment.related_post.id }}</p>
-{% endblock images %}
+{% endblock comments %}
