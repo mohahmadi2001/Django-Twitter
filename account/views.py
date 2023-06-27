@@ -40,3 +40,10 @@ class FollowersView(View):
         user = get_object_or_404(User, username=username)
         followers = user.followers_count
         return render(request, 'followers.html', {'followers': followers})
+
+
+class FollowingsView(View):
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        followings = user.followings_count
+        return render(request, 'followings.html', {'followings': followings})
