@@ -5,6 +5,10 @@ from core.models import BaseModel,TimStampMixin
 
 
 class Post(TimStampMixin,BaseModel):
+    # class Statuses(models.TextChoices):
+    #     DRAFT = "D",_("Draft")
+    #     PUBLISHED = "p",_("Published")
+    
     text = models.TextField(_("post text"))
     publish_at = models.DateTimeField(_("publish at"),
                                       auto_now=False,
@@ -13,7 +17,8 @@ class Post(TimStampMixin,BaseModel):
                             verbose_name=_("User"),
                             on_delete=models.CASCADE)
     is_archived = models.BooleanField(default=False, verbose_name="Archived")
-
+    # status = models.CharField(_("status"),Statuses)
+    
     
     def is_liked_by_user(self,user):
         return self.reaction_set.filter(user=user).exists()
