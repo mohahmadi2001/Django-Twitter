@@ -78,7 +78,7 @@ class UserRegisterForm(forms.ModelForm):
         return user
 
 
-class UserEditInfo(forms.ModelForm):
+class UserEditInfoForm(forms.ModelForm):
     
     class Meta:
         model = User

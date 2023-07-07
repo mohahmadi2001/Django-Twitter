@@ -1,9 +1,0 @@
-{% extends 'base/base.html' %}
-{% block title %}
-Profile 
-{% endblock title %}{% block profile %}
-<h1>User Profile</h1>
-<h2>{{profile.username}}</h2>
-<img src="{{ profile.image }}" alt="{{profile.username}}">
-<p>{{profile.bio}}</p>
-{% endblock profile %}
