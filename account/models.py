@@ -12,13 +12,7 @@ class User(AbstractUser):
         upload_to='profilePhoto')
     bio = models.TextField(_("Biography"))
     
-    def view_profile(self):
-        profile = {
-            'username': self.username,
-            'image': self.image.url,
-            'bio': self.bio,
-        }
-        return profile
+    
     @property
     def followings_count(self) -> int:
         return self.followings.count()
