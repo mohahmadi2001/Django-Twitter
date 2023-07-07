@@ -11,7 +11,8 @@ The following are implemented in this project:
 7. Users should be able to archive their posts or account to remove from have access
 
 ## Photos:
-<img src="twitter-digram.jpg" alt="twitter-digram"/>
+![ERD](/twitter-digram.jpg)
+
 
 ## Tools:
 1. Back-End: Python, Django
