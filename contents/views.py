@@ -99,7 +99,15 @@ class UpdatePostView(View):
     def get(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
         form = UpdatePostForm(instance=post)
-        return render(request, 'update_post.html', {'form': form, 'post': post})
+        context ={
+            'form': form,
+            'post': post,
+        }
+        return render(
+            request,
+            'update_post.html',
+            context=context
+            )
     
     def post(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
@@ -107,8 +115,15 @@ class UpdatePostView(View):
         if form.is_valid():
             form.save()
             return redirect('home')
-        return render(request, 'update_post.html', {'form': form, 'post': post})
-    
+        context ={
+            'form': form,
+            'post': post,
+        }
+        return render(
+            request,
+            'update_post.html',
+            context=context
+            )    
     
 class CommentView(View):
     def post(self, request, post_id):
