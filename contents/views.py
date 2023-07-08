@@ -1,3 +1,5 @@
+from typing import Any
+from django import http
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Tag,Image,Comment,Reaction
 from django.views import View
@@ -96,12 +98,15 @@ class CreatePostView(View):
     
     
 class UpdatePostView(View):
-    def get(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id)
-        form = UpdatePostForm(instance=post)
+    def setup(self, request, id) :
+        self.this_post = get_object_or_404(Post, pk=id)
+        return super().setup(request,id)
+    
+    def get(self, request):
+        form = UpdatePostForm(instance= self.this_post)
         context ={
             'form': form,
-            'post': post,
+            'post':  self.this_post,
         }
         return render(
             request,
@@ -109,15 +114,14 @@ class UpdatePostView(View):
             context=context
             )
     
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, pk=post_id)
-        form = UpdatePostForm(request.POST, instance=post)
+    def post(self, request):
+        form = UpdatePostForm(request.POST, instance= self.this_post)
         if form.is_valid():
             form.save()
             return redirect('content:post_detail')
         context ={
             'form': form,
-            'post': post,
+            'post':  self.this_post,
         }
         return render(
             request,
