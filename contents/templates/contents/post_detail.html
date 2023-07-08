@@ -1,11 +1,22 @@
-{% extends 'base/base.html' %}
-{% block title %}
-Posts List
-{% endblock title %}{% block post %}
-<h1>Post List</h1>
-<ul>
-    {% for post in posts %}
-        <li>{{ post.text }}</li>
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+{% if post.uer.id == request.uer.id %}
+<a href="{% url 'content:update_post' %}">{% trans "update" %}</a>
+{% endif %}
+<h2>{{ post.title }}</h2><hr/>
+<p>{{ post.user.username }} - {{ post.created_at|date:"Y-M" }}</p>
+<p>{{ post.text }}</p><hr/>
+
+    {% for comment in comments %}
+        <div class="card bg-dark text-white">
+            <p class="card-header">{{ comment.user }} | {{ comment.created|timesince }}</p>
+            <p class="card-body">{{ comment.text }}</p>
+        </div><br/>
+    {% empty %}
+        <p>No comments yet!</p>
     {% endfor %}
-</ul>
-{% endblock post %}
+
+{% endblock %}
