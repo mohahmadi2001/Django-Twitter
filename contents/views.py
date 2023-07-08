@@ -114,7 +114,7 @@ class UpdatePostView(View):
         form = UpdatePostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('content:post_detail')
         context ={
             'form': form,
             'post': post,
