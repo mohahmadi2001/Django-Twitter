@@ -4,11 +4,6 @@ from django.views import View
 from .forms import CreatePostForm,UpdatePostForm,CommentForm
 # Create your views here.
 
-class PostView(View):
-    def get(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
-        return render(request, 'post_detail.html', {'post': post})
-
 
 class TagView(View):
     def post(self, request, post_id):
@@ -60,9 +55,19 @@ class UnarchivePostView(View):
         return render(request,'post_detail.html', args=[post_id])
 
 
-
-
-  
+class PostDetailView(View):
+    def get(self,request,id):
+        post = Post.objects.get(id=id)
+        comments = Post.comment_set.all()
+        return render(
+            request,
+            "content/post_detail.html",
+            context={
+                "post":post,
+                "comments":comments
+            }
+        )
+        
 
 class CreatePostView(View):
     def get(self, request):
@@ -100,3 +105,4 @@ class CommentView(View):
             form.save()
             return redirect('content:comment_view', post_id=post.id)
         return redirect('content:post_detail')
+
