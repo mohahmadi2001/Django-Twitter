@@ -12,6 +12,7 @@ class TagView(View):
         post.add_tag(tag_text)
         return render(request,'post_detail.html', args=[post_id])
     
+    
 class RemoveTagView(View):
     def post(self, request, post_id):
         tag_text = request.POST.get('tag_text')
@@ -27,6 +28,7 @@ class ImageView(View):
         post.add_image(image_file)
         return render(request,'post_detail.html', args=[post_id])
 
+
 class RemoveImageView(View):
     def post(self, request, post_id, image_id):
         post = get_object_or_404(Image, pk=post_id)
@@ -40,7 +42,6 @@ class ReactionView(View):
         return render(request, 'reaction_view.html', {'reaction': reaction})
     
 
-
 class ArchivePostView(View):
     def post(self, request, post_id):
         post = get_object_or_404(Post, pk=post_id)
@@ -53,6 +54,18 @@ class UnarchivePostView(View):
         post = get_object_or_404(Post, pk=post_id)
         post.unarchive()
         return render(request,'post_detail.html', args=[post_id])
+
+
+class PostListView(View):
+    def get(self,request):
+        posts = Post.objects.all()
+        return render(
+            request,
+            "content:post_list.html",
+            context={
+                "posts":posts,
+            },
+        )
 
 
 class PostDetailView(View):

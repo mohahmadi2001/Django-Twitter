@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import PostView,TagView,ImageView,CommentView,ReactionView,CreatePostView,UpdatePostView
+from .views import PostListView,PostDetailView,TagView,ImageView,CommentView,ReactionView,CreatePostView,UpdatePostView
 
 app_name = "content"
 urlpatterns = [
-    path('posts/',PostView.as_view(),name="post_detail"),
+    path('posts/',PostListView.as_view(),name="post_list"),
+    path('detail/',PostDetailView.as_view(),name="post_detail"),
     path('tags/',TagView.as_view(),name="tag_view"),
     path('images/',ImageView.as_view(),name="image_view"),
     path('reactions/',ReactionView.as_view(),name="reaction"),
