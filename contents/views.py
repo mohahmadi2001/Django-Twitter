@@ -1,8 +1,10 @@
 from typing import Any
 from django import http
+from django.http.response import HttpResponse
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Tag,Image,Comment,Reaction
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CreatePostForm,UpdatePostForm,CommentForm
 # Create your views here.
 
@@ -97,11 +99,17 @@ class CreatePostView(View):
         return render(request, 'create_post.html', {'form': form})
     
     
-class UpdatePostView(View):
+class UpdatePostView(LoginRequiredMixin,View):
+    
     def setup(self, request, id) :
         self.this_post = get_object_or_404(Post, pk=id)
         return super().setup(request,id)
     
+    def dispatch(self, request,id):
+        if self.this_post.user.id != request.user.id:
+            return redirect("content:post_detail")   
+        return super().dispatch(request,id)
+
     def get(self, request):
         form = UpdatePostForm(instance= self.this_post)
         context ={
@@ -128,6 +136,7 @@ class UpdatePostView(View):
             'update_post.html',
             context=context
             )    
+    
     
 class CommentView(View):
     def post(self, request, post_id):
